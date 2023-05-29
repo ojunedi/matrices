@@ -1,5 +1,5 @@
 import pytest
-from functions import getDeterminant
+from functions import getDeterminant, inverse
 
 class TestDeterminant:
     def test_two_by_two(self):
@@ -25,8 +25,43 @@ class TestDeterminant:
         matrix = [[0,1,3],[2,4,2],[9,8,11]]
         assert getDeterminant(matrix) == -64
 
-    
+
+    def test_large_matrix(self):
+        matrix = [
+            [1, 2, -1, 3, 4, -2, -4],
+            [4, 6, 3, 1, 0, -1, 2],
+            [2, -4, -2, -1, 2, 3, 1],
+            [1, 0, -3, 3, 2, 4, 1],
+            [1, 3, -2, 1, 0, 0, 2],
+            [1, 3, -2, 3, 5, -2, 1],
+            [1, 0, 0, 1, 2, -4, -1]
+
+        ]
+        assert getDeterminant(matrix) == -19412
 
 
+class TestInverse:
+    def test_non_invertible_2x2(self):
+        matrix = [[0,0],[0,0]]
+        assert inverse(matrix) == "Non-Invertible Matrix!"
+
+        matrix = [[1, 0], [0, 0]]
+        assert inverse(matrix) == "Non-Invertible Matrix!"
+
+        matrix = [[2, 4], [1, 2]]
+        assert inverse(matrix) == "Non-Invertible Matrix!"
 
 
+    def test_2x2(self):
+
+        matrix = [[1,2],[3,4]]
+        assert inverse(matrix) == [[-2, 1], [1.5, -0.5]]
+
+        matrix = [[1, 1], [1, 2]]
+        assert inverse(matrix) == [[2, -1], [-1, 1]]
+
+        matrix = [[-3, 2],[1, 4]]
+        assert inverse(matrix) == [[-2/7, 1/7], [1/14, 3/14]]
+
+        matrix = [[2, -1], [1, -2]]
+        assert inverse(matrix) == [[2/3, -1/3], [1/3, -2/3]]
