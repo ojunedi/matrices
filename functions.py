@@ -1,6 +1,3 @@
-#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
-
-
 def transpose(matrix: list[list[int]]) -> list[list[int]]:
     return [[row[j] for row in matrix] for j in range(matrix[0])]
 
@@ -30,3 +27,6 @@ def eigenvalues():
 
 def inverse(matrix: list[list[int]]):
     pass
+
+
+# this is very weird
