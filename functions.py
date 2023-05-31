@@ -20,7 +20,7 @@ def multipy(A: list[list[float]], B: list[list[float]] | list[float]) -> list[li
     return result
 
 def transpose(matrix: list[list[float]]) -> list[list[float]]:
-    return [[row[j] for row in matrix] for j in range(matrix[0])]
+    return [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
 
 def getMinorMatrix(matrix, i, j) -> list[list[float]]:
     return [row[:j] + row[j+1:] for row in (matrix[:i]+matrix[i+1:])]
@@ -70,6 +70,7 @@ def inverse(matrix: list[list[float]]) -> list[list[float]] | str:
     return adjugate
 
 # using the power iteration 
+# https://en.wikipedia.org/wiki/Power_iteration
 # copped out and used numpy because implementing it with my own functions was a pain in the ass
 def eigenvalues(matrix: list[list[float]], num_iterations: int) -> list[float]:
     x = np.random.rand(len(matrix))
@@ -80,7 +81,7 @@ def eigenvalues(matrix: list[list[float]], num_iterations: int) -> list[float]:
         x = A @ x / np.linalg.norm(A @ x)
         lam = (x.T @ A @ x) / (x.T @ x)
         if np.abs(lam - lam_prev) < tol:
-            break
+            break 
         lam_prev = lam
 
     return list(x), lam
