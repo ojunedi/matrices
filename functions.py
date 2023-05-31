@@ -1,16 +1,35 @@
+import numpy as np
 
 
-def transpose(matrix: list[list[int]]) -> list[list[int]]:
+def norm(X) -> int:
+    squared_sum = sum([x ** 2 for x in X])
+    return np.sqrt(squared_sum)
+
+def multipy(A: list[list[float]], B: list[list[float]] | list[float]) -> list[list[float]] | list[float]:
+
+    result = [[0]*len(B[0]) for _ in range(len(A))]
+
+    for i in range(len(A)):
+    # iterating by column by B
+        for j in range(len(B[0])):
+            # iterating by rows of B
+            for k in range(len(B)):
+                result[i][j] += A[i][k] * B[k][j]
+
+
+    return result
+
+def transpose(matrix: list[list[float]]) -> list[list[float]]:
     return [[row[j] for row in matrix] for j in range(matrix[0])]
 
-def getMinorMatrix(matrix, i, j):
+def getMinorMatrix(matrix, i, j) -> list[list[float]]:
     return [row[:j] + row[j+1:] for row in (matrix[:i]+matrix[i+1:])]
 
 # Calculating the determinant using the laplace expansion
 # recursively
 # https://en.wikipedia.org/wiki/Laplace_expansion
 # REQUIRES: matrix must be an N x N matrix
-def getDeterminant(matrix: list[list[int]]) -> int:
+def getDeterminant(matrix: list[list[float]]) -> float:
 
     n = len(matrix)
     # base case of 2x2 matrix
@@ -24,7 +43,7 @@ def getDeterminant(matrix: list[list[int]]) -> int:
     return determinant
 
 
-def inverse(matrix: list[list[int]]):
+def inverse(matrix: list[list[float]]) -> list[list[float]] | str:
     determinant = getDeterminant(matrix)
 
     if determinant == 0:
@@ -50,6 +69,25 @@ def inverse(matrix: list[list[int]]):
     
     return adjugate
 
+# using the power iteration 
+# copped out and used numpy because implementing it with my own functions was a pain in the ass
+def eigenvalues(matrix: list[list[float]], num_iterations: int) -> list[float]:
+    x = np.random.rand(len(matrix))
+    A = matrix
+    lam_prev = 0
+    tol = 1e-6
+    for _ in range(num_iterations):
+        x = A @ x / np.linalg.norm(A @ x)
+        lam = (x.T @ A @ x) / (x.T @ x)
+        if np.abs(lam - lam_prev) < tol:
+            break
+        lam_prev = lam
 
-def eigenvalues():
-    pass
+    return list(x), lam
+
+test_matrix = [[2,1],[1,2]]
+eigenvector, eigenvalue = eigenvalues(test_matrix, 100)
+eigenvalue = round(eigenvalue, 4)
+print(eigenvector, eigenvalue)
+print(np.dot(test_matrix, eigenvector))
+
